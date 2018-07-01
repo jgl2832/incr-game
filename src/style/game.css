@@ -1,0 +1,33 @@
+div.clickable {
+	border: 1px solid black;
+	height: 50px;
+	line-height: 50px; 
+	text-align: center;
+	vertical-align: middle;
+	display: inline-block;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+div.clickable:hover {
+	background-color: bisque;
+}
+
+.resource-table {
+	border-collapse: collapse;
+}
+
+.resource-table th, .resource-table td {
+	padding: 15px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}

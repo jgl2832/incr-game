@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="src/scripts/game.js"></script>
+		<link rel="stylesheet" type="text/css" href="src/style/game.css">
+	</head>
+	<body>
+		<div id="game">
+			<p>
+			Welcome to my game.
+			</p>
+
+			<div id="dig" class="clickable noselect">
+			Dig
+			</div>
+			<div id="buy-autodigger" class="clickable noselect">
+			Buy Autodigger (<span id="autodigger-cost"></span> p)
+			</div>
+			<div id="buy-factory" class="clickable noselect">
+			Buy Factory (<span id="factory-cost"></span> p)
+			</div>
+
+			<table class="resource-table">
+				<tr>
+					<th>Potential</th>
+					<th>Autodiggers</th>
+					<th>Factory</th>
+				</tr>
+				<tr>
+					<td id="potential">0</td>
+					<td id="autodigger">0</td>
+					<td id="factory">0</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>
