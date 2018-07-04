@@ -2,6 +2,11 @@ $( document ).ready( function() {
 	$.when(
 		$.getScript("src/scripts/resources.js")
 	).done(function() {
+		for (var button in buttons) {
+			var buttonAttrs = buttons[button];
+			$("#"+button).click(buttonAttrs.clickFn);
+		}
+
 		var update = function() {
 			for (var resource in resources) {
 				var resourceAttrs = resources[resource];
@@ -27,10 +32,5 @@ $( document ).ready( function() {
 			}
 		};
 		setInterval(update, 1000 / fps);
-
-		for (var button in buttons) {
-			var buttonAttrs = buttons[button];
-			$("#"+button).click(buttonAttrs.clickFn);
-		}
 	});
 });

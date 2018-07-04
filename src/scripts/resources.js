@@ -27,7 +27,6 @@ var resources = {
 			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, this.boughtCount));
 		},
 		get incomePerFrame () {
-			// TODO make this create autodiggers
 			// 1 autodigger per factory per second
 			var autodiggerPerSecond = 1 * this.count;
 			var autodiggerPerFrame = autodiggerPerSecond / fps;
