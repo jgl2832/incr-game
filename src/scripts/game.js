@@ -13,10 +13,10 @@ $( document ).ready( function() {
 				if (resourceAttrs) {
 
 					// Add income
-					var incomePerFrame = resourceAttrs.incomePerFrame;
-					if (incomePerFrame) {
-						for (var incomeType in incomePerFrame) {
-							resources[incomeType].count += incomePerFrame[incomeType];
+					if (resourceAttrs.incomePerFrame) {
+						incomeDict = resourceAttrs.incomePerFrame();
+						for (var incomeType in incomeDict) {
+							resources[incomeType].count += incomeDict[incomeType];
 						}
 					}
 
@@ -24,9 +24,8 @@ $( document ).ready( function() {
 					$("#"+resource).html(Math.floor(resourceAttrs.count));
 
 					// Update Costs
-					var cost = resourceAttrs.cost;
-					if (cost) {
-						$("#"+resource+"-cost").html(cost);
+					if (resourceAttrs.cost) {
+						$("#"+resource+"-cost").html(multCost(buyMult, resourceAttrs));
 					}
 				}
 			}
