@@ -10,7 +10,9 @@ $( document ).ready( function() {
 					// Add income
 					var incomePerFrame = resourceAttrs.incomePerFrame;
 					if (incomePerFrame) {
-						resources.potential.count += incomePerFrame;
+						for (var incomeType in incomePerFrame) {
+							resources[incomeType].count += incomePerFrame[incomeType];
+						}
 					}
 
 					// Update Resource Amounts
