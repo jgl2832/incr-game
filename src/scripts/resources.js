@@ -33,3 +33,28 @@ var resources = {
 		}
 	}
 }
+var buttons = {
+	dig: {
+		clickFn: function() {
+			resources.potential.count += 1;
+		}
+	},
+	buyAutodigger: {
+		clickFn: function() {
+			var cost = resources.autodigger.cost
+			if (resources.potential.count >= cost) {
+				resources.potential.count -= cost;
+				resources.autodigger.count += 1;
+			}
+		}
+	},
+	buyFactory: {
+		clickFn: function() {
+			var cost = resources.factory.cost
+			if (resources.potential.count >= cost) {
+				resources.potential.count -= cost;
+				resources.factory.count += 1;
+			}
+		}
+	}
+}

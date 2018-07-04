@@ -26,25 +26,9 @@ $( document ).ready( function() {
 		};
 		setInterval(update, 1000 / fps);
 
-
-		// TODO add these types of functions to resources file somehow
-		$("#dig").click(function() {
-			resources.potential.count += 1;
-		});
-		$("#buy-autodigger").click(function() {
-			var cost = resources.autodigger.cost
-			if (resources.potential.count >= cost) {
-				resources.potential.count -= cost;
-				resources.autodigger.count += 1;
-			}
-		});
-		$("#buy-factory").click(function() {
-			var cost = resources.factory.cost
-			if (resources.potential.count >= cost) {
-				resources.potential.count -= cost;
-				resources.factory.count += 1;
-			}
-		});
-
+		for (var button in buttons) {
+			var buttonAttrs = buttons[button];
+			$("#"+button).click(buttonAttrs.clickFn);
+		}
 	});
 });
