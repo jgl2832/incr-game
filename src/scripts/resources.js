@@ -19,7 +19,7 @@ function Resource(startCost, scaleFactor, costForCount, incomePerFrame) {
 	this.costForCount = costForCount;
 	this.incomePerFrame = incomePerFrame;
 	this.cost = function() {
-		return this.costForCount(this.boughCount);
+		return this.costForCount(this.boughtCount);
 	}
 }
 
