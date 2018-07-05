@@ -18,9 +18,7 @@ function Resource(startCost, scaleFactor, costForCount, incomePerFrame) {
 	this.scaleFactor = scaleFactor;
 	this.costForCount = costForCount;
 	this.incomePerFrame = incomePerFrame;
-	this.cost = function() {
-		return this.costForCount(this.boughtCount);
-	}
+	this.cost = () => this.costForCount(this.boughtCount);
 }
 
 // Resource definitions
@@ -55,19 +53,13 @@ var resources = {
 }
 // Button definitions
 var buttons = {
-	dig: new Button(function() {
-		resources.potential.count += 1;
-	}),
-	buyAutodigger: new Button(function() {
-		buyHelper(resources.autodigger, resources.potential);
-	}),
-	buyFactory: new Button(function() {
-		buyHelper(resources.factory, resources.potential);
-	})
+	dig: new Button(() => resources.potential.count += 1),
+	buyAutodigger: new Button(() => buyHelper(resources.autodigger, resources.potential)),
+	buyFactory: new Button(() => buyHelper(resources.factory, resources.potential))
 }
 
 // Helper functions
-var buyHelper = function(resource, costResource) {
+var buyHelper = (resource, costResource) => {
 	var cost = multCost(buyMult, resource)
 	if (costResource.count >= cost) {
 		costResource.count -= cost;
@@ -75,7 +67,7 @@ var buyHelper = function(resource, costResource) {
 		resource.boughtCount += buyMult;
 	}
 }
-var multCost = function(mult, resource) {
+var multCost = (mult, resource) => {
 	var acc = 0;
 	var forCount = resource.boughtCount;
 	var toCount = resource.boughtCount + mult;
