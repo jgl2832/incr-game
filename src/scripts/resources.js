@@ -5,26 +5,32 @@ var fps = 15;
 var buyMult = 1;
 
 // Types
-function Button(clickFn) {
-	this.clickFn = clickFn;
+class Button {
+	constructor(clickFn) {
+		this.clickFn = clickFn;
+	}
 }
-function BasicResource() {
-	this.count = 0;
+class Resource {
+	constructor() {
+		this.count = 0;
+	}
 }
-function Resource(startCost, scaleFactor, costForCount, incomePerFrame) {
-	this.count = 0;
-	this.boughtCount = 0;
-	this.startCost = startCost;
-	this.scaleFactor = scaleFactor;
-	this.costForCount = costForCount;
-	this.incomePerFrame = incomePerFrame;
-	this.cost = () => this.costForCount(this.boughtCount);
+class GeneratorResource extends Resource {
+	constructor(startCost, scaleFactor, costForCount, incomePerFrame) {
+		super();
+		this.boughtCount = 0;
+		this.startCost = startCost;
+		this.scaleFactor = scaleFactor;
+		this.costForCount = costForCount;
+		this.incomePerFrame = incomePerFrame;
+		this.cost = () => this.costForCount(this.boughtCount);
+	}
 }
 
 // Resource definitions
 var resources = {
-	potential: new BasicResource(),
-	autodigger: new Resource(
+	potential: new Resource(),
+	autodigger: new GeneratorResource(
 		10, // startCost
 		1.1, // scaleFactor
 		function(ct) { // costForCount
@@ -37,7 +43,7 @@ var resources = {
 			return { potential: potentialPerFrame }
 		}
 	),
-	factory: new Resource(
+	factory: new GeneratorResource(
 		1000, // startCost
 		1.2, // scaleFactor
 		function(ct) { // costForCount
