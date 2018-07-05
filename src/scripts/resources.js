@@ -29,8 +29,8 @@ var resources = {
 	autodigger: new Resource(
 		10, // startCost
 		1.1, // scaleFactor
-		function(count) { // costForCount
-			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, count));
+		function(ct) { // costForCount
+			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, ct));
 		},
 		function() { // incomePerFrame
 			// 1 potential per autodigger per second
@@ -42,8 +42,8 @@ var resources = {
 	factory: new Resource(
 		1000, // startCost
 		1.2, // scaleFactor
-		function(count) { // costForCount
-			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, count));
+		function(ct) { // costForCount
+			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, ct));
 		},
 		function() { // incomePerFrame
 			// 1 autodigger per factory per second
@@ -77,8 +77,8 @@ var buyHelper = function(resource, costResource) {
 }
 var multCost = function(mult, resource) {
 	var acc = 0;
-	var forCount = resource.count;
-	var toCount = resource.count + mult;
+	var forCount = resource.boughtCount;
+	var toCount = resource.boughtCount + mult;
 	while (forCount < toCount) {
 		acc += resource.costForCount(forCount);
 		forCount += 1;
