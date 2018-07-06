@@ -10,19 +10,42 @@ class Button {
 		this.clickFn = clickFn;
 	}
 }
+class Upgrade {
+	constructor(resource, costResource, mult, cost) {
+		this.bought = false;
+		this.cost = cost;
+		this.buy = function() {
+			if (!this.bought && costResource.count >= cost) {
+				costResource.count -= cost;
+				resource.incomeMult *= mult;
+				this.bought = true;
+				return true;
+			}
+			return false;
+		}
+	}
+}
 class Resource {
 	constructor() {
 		this.count = 0;
 	}
 }
 class GeneratorResource extends Resource {
-	constructor(startCost, scaleFactor, costForCount, incomePerFrame) {
+	constructor(startCost, scaleFactor, costForCount, baseIncomePerFrame) {
 		super();
 		this.boughtCount = 0;
+		this.incomeMult = 1;
 		this.startCost = startCost;
 		this.scaleFactor = scaleFactor;
 		this.costForCount = costForCount;
-		this.incomePerFrame = incomePerFrame;
+		this.baseIncomePerFrame = baseIncomePerFrame;
+		this.incomePerFrame = function() {
+			var base = this.baseIncomePerFrame();
+			for (var inc in base) {
+				base[inc] = base[inc] * this.incomeMult;
+			}
+			return base;
+		};
 		this.cost = () => this.costForCount(this.boughtCount);
 	}
 }
@@ -36,7 +59,7 @@ var resources = {
 		function(ct) { // costForCount
 			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, ct));
 		},
-		function() { // incomePerFrame
+		function() { // baseIncomePerFrame
 			// 1 potential per autodigger per second
 			var potentialPerSecond = 1 * this.count;
 			var potentialPerFrame = potentialPerSecond / fps;
@@ -49,7 +72,7 @@ var resources = {
 		function(ct) { // costForCount
 			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, ct));
 		},
-		function() { // incomePerFrame
+		function() { // baseIncomePerFrame
 			// 1 autodigger per factory per second
 			var autodiggerPerSecond = 1 * this.count;
 			var autodiggerPerFrame = autodiggerPerSecond / fps;
