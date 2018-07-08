@@ -6,12 +6,13 @@ var buyMult = 1;
 
 // Types
 class Button {
-	constructor(clickFn) {
+	constructor(name, text, clickFn) {
 		this.clickFn = clickFn;
 	}
 }
 class Upgrade {
 	constructor(resource, costResource, mult, cost) {
+		var sup = this;
 		this.bought = false;
 		this.cost = cost;
 		this.buy = function() {
@@ -23,16 +24,27 @@ class Upgrade {
 			}
 			return false;
 		}
+		this.html = $("<div />", {
+			id: "upgrade",
+			"class": "clickable noselect",
+			text: resource.name + " x" + mult + " (" + cost + " " + costResource.name + ")",
+			click: function() { 
+				if (sup.buy()) {
+					$(this).hide();
+				}
+			}
+		});
 	}
 }
 class Resource {
-	constructor() {
+	constructor(name) {
+		this.name = name;
 		this.count = 0;
 	}
 }
 class GeneratorResource extends Resource {
-	constructor(startCost, scaleFactor, costForCount, baseIncomePerFrame) {
-		super();
+	constructor(name, startCost, scaleFactor, costForCount, baseIncomePerFrame) {
+		super(name);
 		this.boughtCount = 0;
 		this.incomeMult = 1;
 		this.startCost = startCost;
@@ -52,8 +64,9 @@ class GeneratorResource extends Resource {
 
 // Resource definitions
 var resources = {
-	potential: new Resource(),
+	potential: new Resource("potential"),
 	autodigger: new GeneratorResource(
+		"autodigger",
 		10, // startCost
 		1.1, // scaleFactor
 		function(ct) { // costForCount
@@ -67,6 +80,7 @@ var resources = {
 		}
 	),
 	factory: new GeneratorResource(
+		"factory",
 		1000, // startCost
 		1.2, // scaleFactor
 		function(ct) { // costForCount
@@ -80,11 +94,16 @@ var resources = {
 		}
 	),
 }
+// Upgrade definitions
+var upgrades = [
+	new Upgrade(resources.autodigger, resources.potential, 2, 100),
+	new Upgrade(resources.autodigger, resources.potential, 2, 1000)
+]
 // Button definitions
 var buttons = {
-	dig: new Button(() => resources.potential.count += 1),
-	buyAutodigger: new Button(() => buyHelper(resources.autodigger, resources.potential)),
-	buyFactory: new Button(() => buyHelper(resources.factory, resources.potential))
+	dig: new Button("dig", "Dig", () => resources.potential.count += 1),
+	buyAutodigger: new Button("buyAutodigger", "Buy Autodigger", () => buyHelper(resources.autodigger, resources.potential)),
+	buyFactory: new Button("buyFactory", "Buy Factory", () => buyHelper(resources.factory, resources.potential))
 }
 
 // Helper functions

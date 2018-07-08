@@ -6,7 +6,9 @@ $( document ).ready( function() {
 			var buttonAttrs = buttons[button];
 			$("#"+button).click(buttonAttrs.clickFn);
 		}
-
+		for (var upgrade of upgrades) {
+			$("#upgrades").append(upgrade.html);
+		}
 		var update = function() {
 			for (var resource in resources) {
 				var resourceAttrs = resources[resource];
