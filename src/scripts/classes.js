@@ -1,7 +1,20 @@
 // Types
 class Button {
-	constructor(name, text, clickFn) {
+	constructor(name, text, resource, clickFn) {
 		this.clickFn = clickFn;
+		this.html = $("<div />", {
+			id: name,
+			"class": "clickable noselect",
+			html: (resource.cost) ? [
+				text + " (",
+				$("<span />", {
+					id: resource.costId, 
+					text: "",
+				}),
+				" p)"
+			] : text,
+			click: clickFn
+		});
 	}
 }
 class Upgrade {
@@ -21,7 +34,7 @@ class Upgrade {
 		this.html = $("<div />", {
 			id: "upgrade",
 			"class": "clickable noselect",
-			text: resource.name + " x" + mult + " (" + cost + " " + costResource.name + ")",
+			text: capitalize(resource.name) + " x" + mult + " (" + cost + " " + costResource.name + ")",
 			click: function() { 
 				if (sup.buy()) {
 					$(this).hide();

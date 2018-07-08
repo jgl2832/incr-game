@@ -38,11 +38,20 @@ var upgrades = [
 	new Upgrade(resources.map.get("autodigger"), resources.map.get("potential"), 2, 1000)
 ]
 // Button definitions
-var buttons = {
-	dig: new Button("dig", "Dig", () => resources.map.get("potential").count += 1),
-	buyAutodigger: new Button("buyAutodigger", "Buy Autodigger", () => buyHelper(resources.map.get("autodigger"), resources.map.get("potential"))),
-	buyFactory: new Button("buyFactory", "Buy Factory", () => buyHelper(resources.map.get("factory"), resources.map.get("potential")))
-}
+var buttons = [
+	new Button(
+		"dig", "Dig", resources.map.get("potential"), 
+		() => resources.map.get("potential").count += 1
+	),
+	new Button(
+		"buyAutodigger", "Buy Autodigger", resources.map.get("autodigger"),
+		() => buyHelper(resources.map.get("autodigger"), resources.map.get("potential"))
+	),
+	new Button(
+		"buyFactory", "Buy Factory", resources.map.get("factory"),
+		() => buyHelper(resources.map.get("factory"), resources.map.get("potential"))
+	)
+]
 
 // Helper functions
 var buyHelper = (resource, costResource) => {
