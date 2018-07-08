@@ -11,7 +11,7 @@ class Button {
 					id: resource.costId, 
 					text: "",
 				}),
-				" p)"
+				" $)"
 			] : text,
 			click: clickFn
 		});
@@ -71,30 +71,37 @@ class Resources {
 			"class": "resource-table",
 			html: [
 				$("<tr />", {
-					html: list.map(r => $("<th />", { text: capitalize(r.name) }))
+					html: list.map(r => $("<th />", { 
+						style: "display: none",
+						id: r.nameId,
+						html: [ r.displayName, $("<span />", {
+							id: r.incomeIdContainer,
+							html: [ " (", $("<span />", { id: r.incomeId, text: ""}), ")" ]
+						})]
+					}))
 				}),
 				$("<tr />", {
-					html: list.map(r => $("<td />", { id: r.incomeId, text: ""}))
-				}),
-				$("<tr />", {
-					html: list.map(r => $("<td />", { id: r.countId, text: r.count }))
+					html: list.map(r => $("<td />", { style: "display: none", id: r.countId, text: r.count }))
 				})
 			]
 		});
 	}
 }
 class Resource {
-	constructor(name) {
+	constructor(name, displayName) {
 		this.name = name;
+		this.displayName = displayName;
 		this.count = 0;
+		this.nameId = name + "-name";
 		this.countId = name + "-count";
 		this.incomeId = name + "-income";
+		this.incomeIdContainer = name + "-income-container";
 		this.costId = name + "-cost";
 	}
 }
 class GeneratorResource extends Resource {
-	constructor(name, costForCount, baseIncomePerSecond) {
-		super(name);
+	constructor(name, displayName, costForCount, baseIncomePerSecond) {
+		super(name, displayName);
 		this.boughtCount = 0;
 		this.incomeMult = 1;
 		this.costForCount = costForCount;

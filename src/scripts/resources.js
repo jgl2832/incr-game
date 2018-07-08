@@ -10,10 +10,11 @@ function capitalize(string) {
 
 // Resource definitions
 var resources = new Resources([
-	new Resource("pancake"),
-	new GeneratorResource("griddle",
+	new Resource("bucks", "$$$"),
+	new Resource("pancake", "Pancakes"),
+	new GeneratorResource("griddle", "Griddles",
 		function(ct) { // costForCount
-			return Math.ceil(10 * Math.pow(1.1, ct));
+			return Math.ceil(10 * Math.pow(1.2, ct));
 		},
 		function() { // baseIncomePerSecond
 			// 1 pancake per griddle per second
@@ -21,31 +22,25 @@ var resources = new Resources([
 			return { pancake: pancakePerSecond }
 		}
 	),
-	new GeneratorResource("factory",
+	new GeneratorResource("salesperson", "Pancake Salesperson",
 		function(ct) { // costForCount
-			return Math.ceil(1000 * Math.pow(1.2, ct));
+			return Math.ceil(40 * Math.pow(1.3, ct));
 		},
 		function() { // baseIncomePerSecond
-			// 1 griddle per factory per second
-			var griddlePerSecond = 1 * this.count;
-			return { griddle: griddlePerSecond }
+			// sells one pancake per griddle per second
+			var pancakePerSecond = -1 * this.count;
+			var bucksPerSecond = 1 * this.count;
+			return {
+				pancake: pancakePerSecond,
+				bucks: bucksPerSecond
+			};
 		}
-	),
-	new GeneratorResource("planet",
-		function(ct) { // costForCount
-			return Math.ceil(20000 * Math.pow(1.5, ct));
-		},
-		function() { // baseIncomePerSecond
-			// 1 factory per planet per second
-			var factoryPerSecond = 1 * this.count;
-			return { factory: factoryPerSecond }
-		}
-	)
+		)
 ]);
 // Upgrade definitions
 var upgrades = [
-	new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 100),
-	new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 1000)
+	//new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 100),
+	//new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 1000)
 ]
 // Button definitions
 var buttons = [
@@ -54,18 +49,23 @@ var buttons = [
 		() => resources.map.get("pancake").count += 1
 	),
 	new Button(
+		"sellPancake", "Sell Pancake", resources.map.get("pancake"),
+		() => {
+			if (resources.map.get("pancake").count >= 1) {
+				resources.map.get("pancake").count -= 1;
+				resources.map.get("bucks").count += 1;
+			}
+		}
+	),
+	new Button(
 		"buyGriddle", "Buy Griddle", resources.map.get("griddle"),
-		() => buyHelper(resources.map.get("griddle"), resources.map.get("pancake"))
+		() => buyHelper(resources.map.get("griddle"), resources.map.get("bucks"))
 	),
 	new Button(
-		"buyFactory", "Buy Factory", resources.map.get("factory"),
-		() => buyHelper(resources.map.get("factory"), resources.map.get("pancake"))
-	),
-	new Button(
-		"buyPlanet", "Buy Planet", resources.map.get("planet"),
-		() => buyHelper(resources.map.get("planet"), resources.map.get("pancake"))
+		"buySalesperson", "Buy Pancake Salesperson", resources.map.get("salesperson"),
+		() => buyHelper(resources.map.get("salesperson"), resources.map.get("bucks"))
 	)
-]
+];
 
 // Helper functions
 var buyHelper = (resource, costResource) => {

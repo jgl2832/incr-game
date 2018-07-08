@@ -23,9 +23,18 @@ $( document ).ready( function() {
 				var perSec = resource.name in incomePerSec ? incomePerSec[resource.name] : 0
 				var perFrame = perSec / fps;
 				resource.count += perFrame;
-				$("#"+resource.incomeId).text(Math.floor(perSec) + "/sec");
+				if ( perSec > 0 ) {
+					$("#"+resource.incomeIdContainer).show();
+					$("#"+resource.incomeId).text(Math.floor(perSec) + "/sec");
+				} else {
+					$("#"+resource.incomeIdContainer).hide();
+				}
 				
 				// Update Resource Amounts
+				if (resource.count > 0) {
+					$("#"+resource.nameId).show();
+					$("#"+resource.countId).show();
+				}
 				$("#"+resource.countId).html(Math.floor(resource.count));
 
 				// Update Costs
