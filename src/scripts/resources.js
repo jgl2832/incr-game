@@ -4,6 +4,10 @@ var fps = 15;
 // Currently selected multiplier for buying resources
 var buyMult = 1;
 
+function capitalize(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // Types
 class Button {
 	constructor(name, text, clickFn) {
@@ -36,6 +40,23 @@ class Upgrade {
 		});
 	}
 }
+class Resources {
+	constructor(list) {
+		this.list = list;
+		this.map = new Map(list.map(i => [i.name, i]));
+		this.html = $("<table />", {
+			"class": "resource-table",
+			html: [
+				$("<tr />", {
+					html: list.map(r => $("<th />", { text: capitalize(r.name) }))
+				}),
+				$("<tr />", {
+					html: list.map(r => $("<td />", { id: r.name, text: r.count }))
+				})
+			]
+		});
+	}
+}
 class Resource {
 	constructor(name) {
 		this.name = name;
@@ -63,7 +84,7 @@ class GeneratorResource extends Resource {
 }
 
 // Resource definitions
-var resources = [
+var resources = new Resources([
 	new Resource("potential"),
 	new GeneratorResource("autodigger",
 		10, // startCost
@@ -91,18 +112,17 @@ var resources = [
 			return { autodigger: autodiggerPerFrame }
 		}
 	)
-];
-var resourceMap = new Map(resources.map(i => [i.name, i]));
+]);
 // Upgrade definitions
 var upgrades = [
-	new Upgrade(resourceMap.get("autodigger"), resourceMap.get("potential"), 2, 100),
-	new Upgrade(resourceMap.get("autodigger"), resourceMap.get("potential"), 2, 1000)
+	new Upgrade(resources.map.get("autodigger"), resources.map.get("potential"), 2, 100),
+	new Upgrade(resources.map.get("autodigger"), resources.map.get("potential"), 2, 1000)
 ]
 // Button definitions
 var buttons = {
-	dig: new Button("dig", "Dig", () => resourceMap.get("potential").count += 1),
-	buyAutodigger: new Button("buyAutodigger", "Buy Autodigger", () => buyHelper(resourceMap.get("autodigger"), resourceMap.get("potential"))),
-	buyFactory: new Button("buyFactory", "Buy Factory", () => buyHelper(resourceMap.get("factory"), resourceMap.get("potential")))
+	dig: new Button("dig", "Dig", () => resources.map.get("potential").count += 1),
+	buyAutodigger: new Button("buyAutodigger", "Buy Autodigger", () => buyHelper(resources.map.get("autodigger"), resources.map.get("potential"))),
+	buyFactory: new Button("buyFactory", "Buy Factory", () => buyHelper(resources.map.get("factory"), resources.map.get("potential")))
 }
 
 // Helper functions

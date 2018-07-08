@@ -9,13 +9,14 @@ $( document ).ready( function() {
 		for (var upgrade of upgrades) {
 			$("#upgrades").append(upgrade.html);
 		}
+		$("#resources").append(resources.html);
 		var update = function() {
-			for (var resource of resources) {
+			for (var resource of resources.list) {
 				// Add income
 				if (resource.incomePerFrame) {
 					incomeDict = resource.incomePerFrame();
 					for (var incomeType in incomeDict) {
-						resourceMap.get(incomeType).count += incomeDict[incomeType];
+						resources.map.get(incomeType).count += incomeDict[incomeType];
 					}
 				}
 
