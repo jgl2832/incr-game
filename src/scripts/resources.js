@@ -64,12 +64,10 @@ class Resource {
 	}
 }
 class GeneratorResource extends Resource {
-	constructor(name, startCost, scaleFactor, costForCount, baseIncomePerFrame) {
+	constructor(name, costForCount, baseIncomePerFrame) {
 		super(name);
 		this.boughtCount = 0;
 		this.incomeMult = 1;
-		this.startCost = startCost;
-		this.scaleFactor = scaleFactor;
 		this.costForCount = costForCount;
 		this.baseIncomePerFrame = baseIncomePerFrame;
 		this.incomePerFrame = function() {
@@ -87,10 +85,8 @@ class GeneratorResource extends Resource {
 var resources = new Resources([
 	new Resource("potential"),
 	new GeneratorResource("autodigger",
-		10, // startCost
-		1.1, // scaleFactor
 		function(ct) { // costForCount
-			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, ct));
+			return Math.ceil(10 * Math.pow(1.1, ct));
 		},
 		function() { // baseIncomePerFrame
 			// 1 potential per autodigger per second
@@ -100,10 +96,8 @@ var resources = new Resources([
 		}
 	),
 	new GeneratorResource("factory",
-		1000, // startCost
-		1.2, // scaleFactor
 		function(ct) { // costForCount
-			return Math.ceil(this.startCost * Math.pow(this.scaleFactor, ct));
+			return Math.ceil(1000 * Math.pow(1.2, ct));
 		},
 		function() { // baseIncomePerFrame
 			// 1 autodigger per factory per second
