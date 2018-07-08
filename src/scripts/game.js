@@ -1,4 +1,5 @@
-//TODO make it breakfast themed
+//TODO Add an element of pancake selling
+//TODO add things like syrup and berries to make pancakes sell for more $$
 
 $( document ).ready( function() {
 	$.when(

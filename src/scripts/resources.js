@@ -10,15 +10,15 @@ function capitalize(string) {
 
 // Resource definitions
 var resources = new Resources([
-	new Resource("potential"),
-	new GeneratorResource("autodigger",
+	new Resource("pancake"),
+	new GeneratorResource("griddle",
 		function(ct) { // costForCount
 			return Math.ceil(10 * Math.pow(1.1, ct));
 		},
 		function() { // baseIncomePerSecond
-			// 1 potential per autodigger per second
-			var potentialPerSecond = 1 * this.count;
-			return { potential: potentialPerSecond }
+			// 1 pancake per griddle per second
+			var pancakePerSecond = 1 * this.count;
+			return { pancake: pancakePerSecond }
 		}
 	),
 	new GeneratorResource("factory",
@@ -26,30 +26,44 @@ var resources = new Resources([
 			return Math.ceil(1000 * Math.pow(1.2, ct));
 		},
 		function() { // baseIncomePerSecond
-			// 1 autodigger per factory per second
-			var autodiggerPerSecond = 1 * this.count;
-			return { autodigger: autodiggerPerSecond }
+			// 1 griddle per factory per second
+			var griddlePerSecond = 1 * this.count;
+			return { griddle: griddlePerSecond }
+		}
+	),
+	new GeneratorResource("planet",
+		function(ct) { // costForCount
+			return Math.ceil(20000 * Math.pow(1.5, ct));
+		},
+		function() { // baseIncomePerSecond
+			// 1 factory per planet per second
+			var factoryPerSecond = 1 * this.count;
+			return { factory: factoryPerSecond }
 		}
 	)
 ]);
 // Upgrade definitions
 var upgrades = [
-	new Upgrade(resources.map.get("autodigger"), resources.map.get("potential"), 2, 100),
-	new Upgrade(resources.map.get("autodigger"), resources.map.get("potential"), 2, 1000)
+	new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 100),
+	new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 1000)
 ]
 // Button definitions
 var buttons = [
 	new Button(
-		"dig", "Dig", resources.map.get("potential"), 
-		() => resources.map.get("potential").count += 1
+		"makePancake", "Make Pancake", resources.map.get("pancake"), 
+		() => resources.map.get("pancake").count += 1
 	),
 	new Button(
-		"buyAutodigger", "Buy Autodigger", resources.map.get("autodigger"),
-		() => buyHelper(resources.map.get("autodigger"), resources.map.get("potential"))
+		"buyGriddle", "Buy Griddle", resources.map.get("griddle"),
+		() => buyHelper(resources.map.get("griddle"), resources.map.get("pancake"))
 	),
 	new Button(
 		"buyFactory", "Buy Factory", resources.map.get("factory"),
-		() => buyHelper(resources.map.get("factory"), resources.map.get("potential"))
+		() => buyHelper(resources.map.get("factory"), resources.map.get("pancake"))
+	),
+	new Button(
+		"buyPlanet", "Buy Planet", resources.map.get("planet"),
+		() => buyHelper(resources.map.get("planet"), resources.map.get("pancake"))
 	)
 ]
 
