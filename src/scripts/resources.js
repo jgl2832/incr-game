@@ -8,79 +8,6 @@ function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// Types
-class Button {
-	constructor(name, text, clickFn) {
-		this.clickFn = clickFn;
-	}
-}
-class Upgrade {
-	constructor(resource, costResource, mult, cost) {
-		var sup = this;
-		this.bought = false;
-		this.cost = cost;
-		this.buy = function() {
-			if (!this.bought && costResource.count >= cost) {
-				costResource.count -= cost;
-				resource.incomeMult *= mult;
-				this.bought = true;
-				return true;
-			}
-			return false;
-		}
-		this.html = $("<div />", {
-			id: "upgrade",
-			"class": "clickable noselect",
-			text: resource.name + " x" + mult + " (" + cost + " " + costResource.name + ")",
-			click: function() { 
-				if (sup.buy()) {
-					$(this).hide();
-				}
-			}
-		});
-	}
-}
-class Resources {
-	constructor(list) {
-		this.list = list;
-		this.map = new Map(list.map(i => [i.name, i]));
-		this.html = $("<table />", {
-			"class": "resource-table",
-			html: [
-				$("<tr />", {
-					html: list.map(r => $("<th />", { text: capitalize(r.name) }))
-				}),
-				$("<tr />", {
-					html: list.map(r => $("<td />", { id: r.name, text: r.count }))
-				})
-			]
-		});
-	}
-}
-class Resource {
-	constructor(name) {
-		this.name = name;
-		this.count = 0;
-	}
-}
-class GeneratorResource extends Resource {
-	constructor(name, costForCount, baseIncomePerFrame) {
-		super(name);
-		this.boughtCount = 0;
-		this.incomeMult = 1;
-		this.costForCount = costForCount;
-		this.baseIncomePerFrame = baseIncomePerFrame;
-		this.incomePerFrame = function() {
-			var base = this.baseIncomePerFrame();
-			for (var inc in base) {
-				base[inc] = base[inc] * this.incomeMult;
-			}
-			return base;
-		};
-		this.cost = () => this.costForCount(this.boughtCount);
-	}
-}
-
 // Resource definitions
 var resources = new Resources([
 	new Resource("potential"),
@@ -88,22 +15,20 @@ var resources = new Resources([
 		function(ct) { // costForCount
 			return Math.ceil(10 * Math.pow(1.1, ct));
 		},
-		function() { // baseIncomePerFrame
+		function() { // baseIncomePerSecond
 			// 1 potential per autodigger per second
 			var potentialPerSecond = 1 * this.count;
-			var potentialPerFrame = potentialPerSecond / fps;
-			return { potential: potentialPerFrame }
+			return { potential: potentialPerSecond }
 		}
 	),
 	new GeneratorResource("factory",
 		function(ct) { // costForCount
 			return Math.ceil(1000 * Math.pow(1.2, ct));
 		},
-		function() { // baseIncomePerFrame
+		function() { // baseIncomePerSecond
 			// 1 autodigger per factory per second
 			var autodiggerPerSecond = 1 * this.count;
-			var autodiggerPerFrame = autodiggerPerSecond / fps;
-			return { autodigger: autodiggerPerFrame }
+			return { autodigger: autodiggerPerSecond }
 		}
 	)
 ]);
