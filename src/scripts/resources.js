@@ -63,10 +63,9 @@ class GeneratorResource extends Resource {
 }
 
 // Resource definitions
-var resources = {
-	potential: new Resource("potential"),
-	autodigger: new GeneratorResource(
-		"autodigger",
+var resources = [
+	new Resource("potential"),
+	new GeneratorResource("autodigger",
 		10, // startCost
 		1.1, // scaleFactor
 		function(ct) { // costForCount
@@ -79,8 +78,7 @@ var resources = {
 			return { potential: potentialPerFrame }
 		}
 	),
-	factory: new GeneratorResource(
-		"factory",
+	new GeneratorResource("factory",
 		1000, // startCost
 		1.2, // scaleFactor
 		function(ct) { // costForCount
@@ -92,18 +90,19 @@ var resources = {
 			var autodiggerPerFrame = autodiggerPerSecond / fps;
 			return { autodigger: autodiggerPerFrame }
 		}
-	),
-}
+	)
+];
+var resourceMap = new Map(resources.map(i => [i.name, i]));
 // Upgrade definitions
 var upgrades = [
-	new Upgrade(resources.autodigger, resources.potential, 2, 100),
-	new Upgrade(resources.autodigger, resources.potential, 2, 1000)
+	new Upgrade(resourceMap.get("autodigger"), resourceMap.get("potential"), 2, 100),
+	new Upgrade(resourceMap.get("autodigger"), resourceMap.get("potential"), 2, 1000)
 ]
 // Button definitions
 var buttons = {
-	dig: new Button("dig", "Dig", () => resources.potential.count += 1),
-	buyAutodigger: new Button("buyAutodigger", "Buy Autodigger", () => buyHelper(resources.autodigger, resources.potential)),
-	buyFactory: new Button("buyFactory", "Buy Factory", () => buyHelper(resources.factory, resources.potential))
+	dig: new Button("dig", "Dig", () => resourceMap.get("potential").count += 1),
+	buyAutodigger: new Button("buyAutodigger", "Buy Autodigger", () => buyHelper(resourceMap.get("autodigger"), resourceMap.get("potential"))),
+	buyFactory: new Button("buyFactory", "Buy Factory", () => buyHelper(resourceMap.get("factory"), resourceMap.get("potential")))
 }
 
 // Helper functions

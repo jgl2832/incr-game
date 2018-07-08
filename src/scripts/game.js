@@ -10,25 +10,21 @@ $( document ).ready( function() {
 			$("#upgrades").append(upgrade.html);
 		}
 		var update = function() {
-			for (var resource in resources) {
-				var resourceAttrs = resources[resource];
-				if (resourceAttrs) {
-
-					// Add income
-					if (resourceAttrs.incomePerFrame) {
-						incomeDict = resourceAttrs.incomePerFrame();
-						for (var incomeType in incomeDict) {
-							resources[incomeType].count += incomeDict[incomeType];
-						}
+			for (var resource of resources) {
+				// Add income
+				if (resource.incomePerFrame) {
+					incomeDict = resource.incomePerFrame();
+					for (var incomeType in incomeDict) {
+						resourceMap.get(incomeType).count += incomeDict[incomeType];
 					}
+				}
 
-					// Update Resource Amounts
-					$("#"+resource).html(Math.floor(resourceAttrs.count));
+				// Update Resource Amounts
+				$("#"+resource.name).html(Math.floor(resource.count));
 
-					// Update Costs
-					if (resourceAttrs.cost) {
-						$("#"+resource+"-cost").html(multCost(buyMult, resourceAttrs));
-					}
+				// Update Costs
+				if (resource.cost) {
+					$("#"+resource.name+"-cost").html(multCost(buyMult, resource));
 				}
 			}
 		};
