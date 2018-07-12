@@ -24,14 +24,17 @@ $( document ).ready( function() {
 				var perFrame = perSec / fps;
 				resource.count += perFrame;
 				if ( perSec > 0 ) {
-					$("#"+resource.incomeIdContainer).show();
+					var incomeIdContainer = $("#"+resource.incomeIdContainer);
+					if (incomeIdContainer.is(":hidden")) {
+						incomeIdContainer.show();
+					}
 					$("#"+resource.incomeId).text(Math.floor(perSec) + "/sec");
 				} else {
 					$("#"+resource.incomeIdContainer).hide();
 				}
 				
 				// Update Resource Amounts
-				if (resource.count > 0) {
+				if (resource.count > 0 && $("#"+resource.nameId).is(":hidden")) {
 					$("#"+resource.nameId).show();
 					$("#"+resource.countId).show();
 				}
@@ -40,6 +43,10 @@ $( document ).ready( function() {
 				// Update Costs
 				if (resource.cost) {
 					$("#"+resource.costId).html(multCost(buyMult, resource));
+				}
+
+				if (resource.count > 50 && $("#upgrades-wrapper").is(":hidden")) {
+					$("#upgrades-wrapper").show();
 				}
 			}
 		};

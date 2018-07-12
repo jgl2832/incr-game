@@ -1,3 +1,27 @@
+body {
+	background-image: url("/img/pc.png");
+	background-size: 100px;
+}
+
+.fun-text {
+	color: black;
+    background: red;
+    background: -webkit-linear-gradient(left, red, orange , yellow, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, red, orange, yellow, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, red, orange, yellow, green, cyan, blue, violet);
+    background: linear-gradient(to right, red, orange , yellow, green, cyan, blue, violet);
+    -webkit-background-clip: text;
+	-webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+	-webkit-text-stroke-width: 2px;
+	-webkit-text-stroke-color: black;
+	font-size: 70px;
+}
+
+.game-block {
+	margin: 10px;
+	display: block;
+}
+
 div.clickable {
 	border: 1px solid black;
 	height: 50px;
@@ -7,6 +31,7 @@ div.clickable {
 	display: inline-block;
 	padding-left: 20px;
 	padding-right: 20px;
+	background-color: lightyellow;
 }
 
 div.clickable:hover {
@@ -15,12 +40,14 @@ div.clickable:hover {
 
 .resource-table {
 	border-collapse: collapse;
+	background-color: lightyellow;
+	margin: 10px;
 }
 
 .resource-table th, .resource-table td {
 	padding: 15px;
 	text-align: left;
-	border-bottom: 1px solid #ddd;
+	border: 1px solid black;
 }
 
 .noselect {
@@ -30,4 +57,43 @@ div.clickable:hover {
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }

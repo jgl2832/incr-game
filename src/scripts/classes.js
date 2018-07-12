@@ -17,15 +17,16 @@ class Button {
 		});
 	}
 }
+
 class Upgrade {
-	constructor(resource, costResource, mult, cost) {
+	constructor(text, cost, costResource, effect) {
 		var sup = this;
 		this.bought = false;
 		this.cost = cost;
 		this.buy = function() {
 			if (!this.bought && costResource.count >= cost) {
 				costResource.count -= cost;
-				resource.incomeMult *= mult;
+				effect()
 				this.bought = true;
 				return true;
 			}
@@ -34,7 +35,7 @@ class Upgrade {
 		this.html = $("<div />", {
 			id: "upgrade",
 			"class": "clickable noselect",
-			text: capitalize(resource.name) + " x" + mult + " (" + cost + " " + costResource.name + ")",
+			text: text + " ("+cost+" "+costResource.displayName+")",
 			click: function() { 
 				if (sup.buy()) {
 					$(this).hide();

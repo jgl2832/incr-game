@@ -4,13 +4,16 @@ var fps = 15;
 // Currently selected multiplier for buying resources
 var buyMult = 1;
 
+// How many bucks a pancake goes fer
+var pancakeSellValue = 1;
+
 function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Resource definitions
 var resources = new Resources([
-	new Resource("bucks", "$$$"),
+	new Resource("bucks", "$"),
 	new Resource("pancake", "Pancakes"),
 	new GeneratorResource("griddle", "Griddles",
 		function(ct) { // costForCount
@@ -29,7 +32,7 @@ var resources = new Resources([
 		function() { // baseIncomePerSecond
 			// sells one pancake per griddle per second
 			var pancakePerSecond = -1 * this.count;
-			var bucksPerSecond = 1 * this.count;
+			var bucksPerSecond = pancakeSellValue * this.count;
 			return {
 				pancake: pancakePerSecond,
 				bucks: bucksPerSecond
@@ -39,8 +42,12 @@ var resources = new Resources([
 ]);
 // Upgrade definitions
 var upgrades = [
-	//new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 100),
-	//new Upgrade(resources.map.get("griddle"), resources.map.get("pancake"), 2, 1000)
+	new Upgrade("Syrup - pancakes sell for twice as much", 100, resources.map.get("bucks"), function() {
+		pancakeSellValue *= 2;
+	}),
+	new Upgrade("Butter - pancakes sell for twice as much", 500, resources.map.get("bucks"), function() {
+		pancakeSellValue *= 2;
+	})
 ]
 // Button definitions
 var buttons = [
@@ -53,7 +60,7 @@ var buttons = [
 		() => {
 			if (resources.map.get("pancake").count >= 1) {
 				resources.map.get("pancake").count -= 1;
-				resources.map.get("bucks").count += 1;
+				resources.map.get("bucks").count += pancakeSellValue;
 			}
 		}
 	),
@@ -62,7 +69,7 @@ var buttons = [
 		() => buyHelper(resources.map.get("griddle"), resources.map.get("bucks"))
 	),
 	new Button(
-		"buySalesperson", "Buy Pancake Salesperson", resources.map.get("salesperson"),
+		"buySalesperson", "Hire Pancake Salesperson", resources.map.get("salesperson"),
 		() => buyHelper(resources.map.get("salesperson"), resources.map.get("bucks"))
 	)
 ];
