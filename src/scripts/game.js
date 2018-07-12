@@ -50,7 +50,7 @@ var readyFunction = function() {
 }
 
 $( document ).ready( function() {
-	$.when($.getScript("src/scripts/classes.js")).done(function () {
-		$.when($.getScript("src/scripts/resources.js").done(readyFunction))
+	$.getScript("src/scripts/classes.js").done(function () {
+		$.getScript("src/scripts/resources.js").done(readyFunction)
 	});
 });
