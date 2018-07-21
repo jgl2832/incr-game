@@ -1,17 +1,25 @@
-// Target frames to process per second
-var fps = 15;
+var state = {
+	// Target frames to process per second
+	fps: 15,
 
-// Currently selected multiplier for buying resources
-var buyMult = 1;
+	// Currently selected multiplier for buying resources
+	buyMult: 1,
 
-// How many bucks a pancake goes fer
-var pancakeSellValue = 1;
-var pancakeCreateMult = 1;
+	// How many bucks a pancake goes fer
+	pancakeSellValue: 1,
 
-var griddleUnlocked = false;
-var salespersonUnlocked = false;
+	// How many pancakes are created with one action
+	pancakeCreateMult: 1,
 
-var syrupUnlocked = false;
+	// Is griddle unlocked
+	griddleUnlocked: false,
+
+	// Is Salesperson unlocked
+	salespersonUnlocked: false,
+
+	// Is Syrup unlocked
+	syrupUnlocked: false
+};
 
 function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -27,7 +35,7 @@ var resources = new Resources([
 		},
 		function() { // baseIncomePerSecond
 			// 1 pancake per griddle per second
-			var pancakePerSecond = 1 * pancakeCreateMult * this.count;
+			var pancakePerSecond = 1 * state.pancakeCreateMult * this.count;
 			return { pancake: pancakePerSecond }
 		}
 	),
@@ -38,7 +46,7 @@ var resources = new Resources([
 		function() { // baseIncomePerSecond
 			// sells one pancake per griddle per second
 			var pancakePerSecond = -1 * this.count;
-			var bucksPerSecond = pancakeSellValue * this.count;
+			var bucksPerSecond = state.pancakeSellValue * this.count;
 			return {
 				pancake: pancakePerSecond,
 				bucks: bucksPerSecond
@@ -50,31 +58,31 @@ var resources = new Resources([
 var upgrades = [
 	new Upgrade("first", "Pancakes sell for twice as much", 50, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 10,
-		() => pancakeSellValue *= 2
+		() => state.pancakeSellValue *= 2
 	),
 	new Upgrade("second", "Create pancakes twice as fast", 200, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 45,
-		() => pancakeCreateMult *= 2
+		() => state.pancakeCreateMult *= 2
 	),
 	new Upgrade("griddle", "Unlock Griddle", 400, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 150,
-		() => griddleUnlocked = true
+		() => state.griddleUnlocked = true
 	),
 	new Upgrade("fourth", "Create pancakes twice as fast", 500, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 350,
-		() => pancakeCreateMult *= 2
+		() => state.pancakeCreateMult *= 2
 	),
 	new Upgrade("salesperson", "Unlock Pancake Salesperson", 1000, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 450,
-		() => salespersonUnlocked = true
+		() => state.salespersonUnlocked = true
 	),
 	new Upgrade("sixth", "Pancakes sell for twice as much", 1500, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 900,
-		() => pancakeSellValue *= 2
+		() => state.pancakeSellValue *= 2
 	),
 	new Upgrade("syrup", "Unlock ~Syrup~", 2500, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 1400,
-		() => syrupUnlocked = true
+		() => state.syrupUnlocked = true
 	)
 ]
 // Button definitions
@@ -82,7 +90,7 @@ var buttons = [
 	new Button(
 		"makePancake", "Make Pancake", resources.map.get("pancake"),
 		() => true,
-		() => resources.map.get("pancake").count += pancakeCreateMult
+		() => resources.map.get("pancake").count += state.pancakeCreateMult
 	),
 	new Button(
 		"sellPancake", "Sell Pancake", resources.map.get("pancake"),
@@ -90,29 +98,29 @@ var buttons = [
 		() => {
 			if (resources.map.get("pancake").count >= 1) {
 				resources.map.get("pancake").count -= 1;
-				resources.map.get("bucks").count += pancakeSellValue;
+				resources.map.get("bucks").count += state.pancakeSellValue;
 			}
 		}
 	),
 	new Button(
 		"buyGriddle", "Buy Griddle", resources.map.get("griddle"),
-		() => griddleUnlocked,
+		() => state.griddleUnlocked,
 		() => buyHelper(resources.map.get("griddle"), resources.map.get("bucks"))
 	),
 	new Button(
 		"buySalesperson", "Hire Pancake Salesperson", resources.map.get("salesperson"),
-		() => salespersonUnlocked,
+		() => state.salespersonUnlocked,
 		() => buyHelper(resources.map.get("salesperson"), resources.map.get("bucks"))
 	)
 ];
 
 // Helper functions
 var buyHelper = (resource, costResource) => {
-	var cost = multCost(buyMult, resource)
+	var cost = multCost(state.buyMult, resource)
 	if (costResource.count >= cost) {
 		costResource.count -= cost;
-		resource.count += buyMult;
-		resource.boughtCount += buyMult;
+		resource.count += state.buyMult;
+		resource.boughtCount += state.buyMult;
 	}
 }
 var multCost = (mult, resource) => {

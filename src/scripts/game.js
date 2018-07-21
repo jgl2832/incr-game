@@ -35,7 +35,7 @@ var readyFunction = function() {
 		}
 
 		// Syrup (WIP)
-		if (syrupUnlocked) {
+		if (state.syrupUnlocked) {
 			alert("SYRUP UNLOCKED!!! YOU WIN");
 		}
 
@@ -43,7 +43,7 @@ var readyFunction = function() {
 		for (var resource of resources.list) {
 			// Update income
 			var perSec = resource.name in incomePerSec ? incomePerSec[resource.name] : 0
-			var perFrame = perSec / fps;
+			var perFrame = perSec / state.fps;
 			resource.count += perFrame;
 			if ( perSec > 0 ) {
 				var incomeIdContainer = $("#"+resource.incomeIdContainer);
@@ -64,11 +64,11 @@ var readyFunction = function() {
 
 			// Update Costs
 			if (resource.cost) {
-				$("#"+resource.costId).html(multCost(buyMult, resource));
+				$("#"+resource.costId).html(multCost(state.buyMult, resource));
 			}
 		}
 	};
-	setInterval(update, 1000 / fps);
+	setInterval(update, 1000 / state.fps);
 }
 
 $( document ).ready( function() {

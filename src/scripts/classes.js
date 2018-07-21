@@ -123,7 +123,7 @@ class GeneratorResource extends Resource {
 		this.incomePerFrame = function() {
 			var base = this.incomePerSecond();
 			for (var inc in base) {
-				base[inc] /= fps;
+				base[inc] /= state.fps;
 			}
 			return base;
 		}
