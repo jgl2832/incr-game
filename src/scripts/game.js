@@ -34,6 +34,11 @@ var readyFunction = function() {
 			}
 		}
 
+		// Syrup (WIP)
+		if (syrupUnlocked) {
+			alert("SYRUP UNLOCKED!!! YOU WIN");
+		}
+
 		// Update HTML elements
 		for (var resource of resources.list) {
 			// Update income

@@ -9,7 +9,9 @@ var pancakeSellValue = 1;
 var pancakeCreateMult = 1;
 
 var griddleUnlocked = false;
+var salespersonUnlocked = false;
 
+var syrupUnlocked = false;
 
 function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -57,6 +59,22 @@ var upgrades = [
 	new Upgrade("griddle", "Unlock Griddle", 400, resources.map.get("bucks"),
 		() => resources.map.get("bucks").count >= 150,
 		() => griddleUnlocked = true
+	),
+	new Upgrade("fourth", "Create pancakes twice as fast", 500, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 350,
+		() => pancakeCreateMult *= 2
+	),
+	new Upgrade("salesperson", "Unlock Pancake Salesperson", 1000, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 450,
+		() => salespersonUnlocked = true
+	),
+	new Upgrade("sixth", "Pancakes sell for twice as much", 1500, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 900,
+		() => pancakeSellValue *= 2
+	),
+	new Upgrade("syrup", "Unlock ~Syrup~", 2500, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 1400,
+		() => syrupUnlocked = true
 	)
 ]
 // Button definitions
@@ -83,7 +101,7 @@ var buttons = [
 	),
 	new Button(
 		"buySalesperson", "Hire Pancake Salesperson", resources.map.get("salesperson"),
-		() => false,
+		() => salespersonUnlocked,
 		() => buyHelper(resources.map.get("salesperson"), resources.map.get("bucks"))
 	)
 ];
