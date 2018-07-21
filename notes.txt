@@ -1,0 +1,15 @@
+1) Make Pancake Phase
+	a) Can only make pancakes
+2) Sell Pancake Phase
+	a) After making 10 pancakes, can start selling pancakes manually
+3) Upgrade Phase
+	a) After getting $10, upgrades unlocked
+		i  ) Double Pancake sell price
+		ii ) Double Pancake creation rate
+		iii) Unlock Griddle
+		iv ) Double Pancake creation rate
+		v  ) Unlock Salesperson
+		vi ) Double Pancake sell price
+		vii) Unlock Syrup
+4) Syrup Phase
+	a) Can only make syrup 

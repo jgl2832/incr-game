@@ -1,10 +1,13 @@
 // Types
 class Button {
-	constructor(name, text, resource, clickFn) {
+	constructor(name, text, resource, showWhen, clickFn) {
+		this.id = name;
+		this.showWhen = showWhen;
 		this.clickFn = clickFn;
 		this.html = $("<div />", {
 			id: name,
 			"class": "clickable noselect",
+			style: "display: none;",
 			html: (resource.cost) ? [
 				text + " (",
 				$("<span />", {
@@ -19,10 +22,12 @@ class Button {
 }
 
 class Upgrade {
-	constructor(text, cost, costResource, effect) {
+	constructor(name, text, cost, costResource, showWhen, effect) {
 		var sup = this;
+		this.id = name;
 		this.bought = false;
 		this.cost = cost;
+		this.showWhen = showWhen;
 		this.buy = function() {
 			if (!this.bought && costResource.count >= cost) {
 				costResource.count -= cost;
@@ -33,7 +38,8 @@ class Upgrade {
 			return false;
 		}
 		this.html = $("<div />", {
-			id: "upgrade",
+			id: name,
+			style: "display: none;",
 			"class": "clickable noselect",
 			text: text + " ("+cost+" "+costResource.displayName+")",
 			click: function() { 

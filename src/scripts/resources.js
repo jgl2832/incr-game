@@ -6,6 +6,10 @@ var buyMult = 1;
 
 // How many bucks a pancake goes fer
 var pancakeSellValue = 1;
+var pancakeCreateMult = 1;
+
+var griddleUnlocked = false;
+
 
 function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -21,7 +25,7 @@ var resources = new Resources([
 		},
 		function() { // baseIncomePerSecond
 			// 1 pancake per griddle per second
-			var pancakePerSecond = 1 * this.count;
+			var pancakePerSecond = 1 * pancakeCreateMult * this.count;
 			return { pancake: pancakePerSecond }
 		}
 	),
@@ -42,21 +46,29 @@ var resources = new Resources([
 ]);
 // Upgrade definitions
 var upgrades = [
-	new Upgrade("Syrup - pancakes sell for twice as much", 100, resources.map.get("bucks"), function() {
-		pancakeSellValue *= 2;
-	}),
-	new Upgrade("Butter - pancakes sell for twice as much", 500, resources.map.get("bucks"), function() {
-		pancakeSellValue *= 2;
-	})
+	new Upgrade("first", "Pancakes sell for twice as much", 50, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 10,
+		() => pancakeSellValue *= 2
+	),
+	new Upgrade("second", "Create pancakes twice as fast", 200, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 45,
+		() => pancakeCreateMult *= 2
+	),
+	new Upgrade("griddle", "Unlock Griddle", 400, resources.map.get("bucks"),
+		() => resources.map.get("bucks").count >= 150,
+		() => griddleUnlocked = true
+	)
 ]
 // Button definitions
 var buttons = [
 	new Button(
-		"makePancake", "Make Pancake", resources.map.get("pancake"), 
-		() => resources.map.get("pancake").count += 1
+		"makePancake", "Make Pancake", resources.map.get("pancake"),
+		() => true,
+		() => resources.map.get("pancake").count += pancakeCreateMult
 	),
 	new Button(
 		"sellPancake", "Sell Pancake", resources.map.get("pancake"),
+		() => resources.map.get("pancake").count >= 10,
 		() => {
 			if (resources.map.get("pancake").count >= 1) {
 				resources.map.get("pancake").count -= 1;
@@ -66,10 +78,12 @@ var buttons = [
 	),
 	new Button(
 		"buyGriddle", "Buy Griddle", resources.map.get("griddle"),
+		() => griddleUnlocked,
 		() => buyHelper(resources.map.get("griddle"), resources.map.get("bucks"))
 	),
 	new Button(
 		"buySalesperson", "Hire Pancake Salesperson", resources.map.get("salesperson"),
+		() => false,
 		() => buyHelper(resources.map.get("salesperson"), resources.map.get("bucks"))
 	)
 ];

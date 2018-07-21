@@ -13,6 +13,27 @@ var readyFunction = function() {
 		// get current income persecond
 		var incomePerSec = resources.totalIncomePerSecond();
 
+		// Button visibility
+		for (var button of buttons) {
+			var buttonHtml = $("#"+button.id);
+			if (buttonHtml.is(":hidden") && button.showWhen()) {
+				buttonHtml.show();
+			}
+		}
+
+		// Upgrade visibility
+		for (var upgrade of upgrades) {
+			if (!upgrade.bought) {
+				var upgradeHtml = $("#"+upgrade.id);
+				if (upgradeHtml.is(":hidden") && upgrade.showWhen()) {
+					if ($("#upgrades-wrapper").is(":hidden")) {
+						$("#upgrades-wrapper").show();
+					}
+					upgradeHtml.show();
+				}
+			}
+		}
+
 		// Update HTML elements
 		for (var resource of resources.list) {
 			// Update income
@@ -39,10 +60,6 @@ var readyFunction = function() {
 			// Update Costs
 			if (resource.cost) {
 				$("#"+resource.costId).html(multCost(buyMult, resource));
-			}
-
-			if (resource.count > 50 && $("#upgrades-wrapper").is(":hidden")) {
-				$("#upgrades-wrapper").show();
 			}
 		}
 	};
